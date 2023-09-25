@@ -48,22 +48,22 @@
             });
         }
     </script>
-    @if ($user_categories)
+    @if ($user_categories->isNotEmpty())
         <table>
             <tr>
-                @foreach (array_keys($user_categories[0]) as $field_name)
-                    <td>{{$field_name}}</td>
-                @endforeach
+                <td>Id</td>
+                <td>Name</td>
                 <td>Actions</td>
             </tr>
             @foreach ($user_categories as $user_category)
                 <tr>
-                    @foreach ($user_category as $name => $field)
-                        <td>{{$field}}</td>
-                    @endforeach
+                    <td>{{ $user_category->id }}</td>
+                    <td>{{ $user_category->name }}</td>
                     <td>
-                        <a href="{{route('user_categories.edit', ['user_category' => $user_category['id']])}}" class="">Edit</a>/
-                        <button id="destroy" onclick="user_category_delete('{{route('user_categories.destroy', ['user_category' => $user_category['id']])}}')";>Delete</button>
+                        <a href="{{route('user_categories.edit', $user_category->id)}}">Edit</a>/
+                        <a onclick="user_category_delete('{{route('user_categories.destroy', $user_category->id)}}')">
+                            Delete
+                        </a>
                     </td>
                 </tr>
             @endforeach

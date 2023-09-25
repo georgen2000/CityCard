@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CityRequest;
 use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -14,8 +15,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::all();
-        return view('admin.cities.index', ['cities'=> $cities ? $cities->toArray(): []]);
+        return view('admin.cities.index', ['cities'=> City::all()]);
     }
 
     /**
@@ -29,12 +29,9 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CityRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        $city = new City($validatedData);
+        $city = new City($request->validated());  # todo
         $city->save();
         return Redirect::route('cities.create')->with('status', 'city-created');
     }
@@ -42,23 +39,17 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $city = City::find($id);
-        if (!$city) return Redirect::route('cities.index');
-        return view('admin.cities.edit', ['city'=>$city->toArray()]);
+    public function edit(City $city) {
+        return view('admin.cities.edit', ['city' => $city]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CityRequest $request, City $city)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        City::find($id)->update($validatedData);
-        return Redirect::route('cities.edit', ['city'=>$id] )->with('status', 'city-updated');
+        $city->update($request->all());
+        return Redirect::route('cities.edit', $city)->with('status', 'city-updated');
     }
 
     /**

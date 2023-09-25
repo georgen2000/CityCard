@@ -32,27 +32,6 @@ class Card extends Model
         return $this->belongsTo(CardType::class);
     }
 
-    public function getShowFields(): Array{
-        $card_type = $this->card_type;
-        if (!$card_type) {
-            return [
-                'id' => $this->id,
-                'number' => $this->number,
-                'balance' => $this->balance,
-                'warning' => 'card is no active'
-            ];
-        }
-        return [
-            'id' => $this->id,
-            'number' => $this->number,
-            'balance' => $this->balance,
-            'ticket_price' => $card_type->price,
-            'user_category' => $card_type->user_category->name,
-            'city' => $card_type->city->name,
-            'transport' => $card_type->transport->name,
-        ];
-    }
-
     public function setBalance() {
         $balance = $this->transactions->sum(function ($transaction) {
             $res = $transaction->money_count;

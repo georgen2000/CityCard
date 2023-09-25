@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransportRequest;
 use Illuminate\Http\Request;
 use App\Models\Transport;
 use Illuminate\Support\Facades\Redirect;
@@ -15,8 +16,7 @@ class TransportController extends Controller
      */
     public function index()
     {
-        $transports = Transport::all();
-        return view('admin.transports.index', ['transports'=> $transports? $transports->toArray(): []]);
+        return view('admin.transports.index', ['transports'=> Transport::all()]);
     }
 
     /**
@@ -30,12 +30,9 @@ class TransportController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TransportRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        $transport = new Transport($validatedData);
+        $transport = new Transport($request->all());
         $transport->save();
         return Redirect::route('transports.create')->with('status', 'transport-created');
     }
@@ -43,23 +40,18 @@ class TransportController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Transport $transport)
     {
-        $transport = Transport::find($id);
-        if (!$transport) return Redirect::route('transports.index');
-        return view('admin.transports.edit', ['transport'=> $transport->toArray()]);
+        return view('admin.transports.edit', ['transport'=> $transport]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TransportRequest $request, Transport $transport)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        Transport::find($id)->update($validatedData);
-        return Redirect::route('transports.edit', ['transport'=>$id] )->with('status', 'transport-updated');
+        $transport->update($request->all());
+        return Redirect::route('transports.edit', $transport)->with('status', 'transport-updated');
     }
 
     /**

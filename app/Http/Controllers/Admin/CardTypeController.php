@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CardTypeRequest;
 use App\Models\UserCategory;
 use App\Models\CardType;
 use App\Models\City;
@@ -17,17 +18,8 @@ class CardTypeController extends Controller
      */
     public function index()
     {
-        $card_types = CardType::all()->each(function($card_type) {
-            $card_type->city->href = route('cities.edit', $card_type->city->id);
-            $card_type->transport->href = route('transports.edit', $card_type->transport->id);
-            $card_type->user_category->href = route('user_categories.edit', $card_type->user_category->id);
-
-            unset($card_type->city_id);
-            unset($card_type->transport_id);
-            unset($card_type->user_category_id);
-        })->toArray();
-
-        return view('admin.card_types.index', ['card_types'=> $card_types]);
+        $cardTypes = CardType::all()->load(['city', 'transport', 'user_category']);
+        return view('admin.card_types.index', ['card_types'=> $cardTypes]);
     }
 
     /**
@@ -45,31 +37,21 @@ class CardTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CardTypeRequest $request)
     {
-        $validatedData = $request->validate([
-            'price' => ['required','integer'],
-            'user_category_id' => ['required', 'integer'],
-            'transport_id' => ['required', 'integer'],
-            'city_id' => ['required', 'integer'],
-        ]);
-        $card_type = new CardType($validatedData);
-        $card_type->save();
+        $cardType = new CardType($request->all());
+        $cardType->save();
         return Redirect::route('card_types.create')->with('status', 'card-type-created');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(CardType $cardType)
     {
-        $card_type = CardType::find($id);
-        if (!$card_type) return Redirect::route('card_types.index');
-        $card_type->city;
-        $card_type->transport;
-        $card_type->user_category;
+        // $cardType->load('city', 'transport', 'userCategory');
         return view('admin.card_types.edit', [
-            'card_type'=> $card_type,
+            'card_type'=> $cardType,
             'user_categgoties'=> UserCategory::all(),
             'cities'=> City::all(),
             'transports'=> Transport::all(),
@@ -79,16 +61,10 @@ class CardTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CardTypeRequest $request, CardType $cardType)
     {
-        $validatedData = $request->validate([
-            'price' => ['required','integer'],
-            'user_category_id' => ['required', 'integer'],
-            'transport_id' => ['required', 'integer'],
-            'city_id' => ['required', 'integer'],
-        ]);
-        CardType::find($id)->update($validatedData);
-        return Redirect::route('card_types.edit', ['card_type'=>$id] )->with('status', 'card-type-updated');
+        $cardType->update($request->validated());
+        return Redirect::route('card_types.edit', ['card_type'=>$cardType] )->with('status', 'card-type-updated');
     }
 
     /**

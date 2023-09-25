@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserCategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\UserCategory;
 use Illuminate\Support\Facades\Redirect;
@@ -14,8 +15,7 @@ class UserCategoryController extends Controller
      */
     public function index()
     {
-        $user_categories = UserCategory::all();
-        return view('admin.user_categories.index', ['user_categories'=> $user_categories? $user_categories->toArray() : []]);
+        return view('admin.user_categories.index', ['user_categories'=> UserCategory::all()]);
     }
 
     /**
@@ -29,36 +29,28 @@ class UserCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserCategoryRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        $user_category = new UserCategory($validatedData);
+        $user_category = new UserCategory($request->all());
         $user_category->save();
-        return Redirect::route('user_categories.create')->with('status', 'user_category-created');
+        return Redirect::route('user_categories.create')->with('status', 'user-category-created');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(UserCategory $userCategory)
     {
-        $user_category = UserCategory::find($id);
-        if (!$user_category) return Redirect::route('admin.user_categories.index');
-        return view('admin.user_categories.edit', ['user_category'=>$user_category->toArray()]);
+        return view('admin.user_categories.edit', ['user_category'=>$userCategory]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserCategoryRequest $request, UserCategory $userCategory)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255', 'string'],
-        ]);
-        UserCategory::find($id)->update($validatedData);
-        return Redirect::route('user_categories.edit', ['user_category'=>$id] )->with('status', 'user_category-updated');
+        $userCategory->update($request->all());
+        return Redirect::route('user_categories.edit', $userCategory)->with('status', 'user-category-updated');
     }
 
     /**

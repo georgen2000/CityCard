@@ -48,22 +48,20 @@
             });
         }
     </script>
-    @if ($transports)
+    @if ($transports->isNotEmpty())
         <table>
             <tr>
-                @foreach (array_keys($transports[0]) as $field_name)
-                    <td>{{$field_name}}</td>
-                @endforeach
+                <td>Id</td>
+                <td>Name</td>
                 <td>Actions</td>
             </tr>
             @foreach ($transports as $transport)
                 <tr>
-                    @foreach ($transport as $name => $field)
-                        <td>{{$field}}</td>
-                    @endforeach
+                    <td>{{ $transport->id }}</td>
+                    <td>{{ $transport->name }}</td>
                     <td>
-                        <a href="{{route('transports.edit', ['transport' => $transport['id']])}}" class="">Edit</a>/
-                        <button id="destroy" onclick="transport_delete('{{route('transports.destroy', ['transport' => $transport['id']])}}')";>Delete</button>
+                        <a href="{{route('transports.edit', $transport->id)}}">Edit</a>/
+                        <a onclick="transport_delete('{{route('transports.destroy', $transport->id)}}')">Delete</a>
                     </td>
                 </tr>
             @endforeach

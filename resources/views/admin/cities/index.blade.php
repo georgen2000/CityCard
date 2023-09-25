@@ -48,22 +48,20 @@
             });
         }
     </script>
-    @if ($cities)
+    @if ($cities->isNotEmpty())
         <table>
             <tr>
-                @foreach (array_keys($cities[0]) as $field_name)
-                    <td>{{$field_name}}</td>
-                @endforeach
+                <td>ID</td>
+                <td>Name</td>
                 <td>Actions</td>
             </tr>
             @foreach ($cities as $city)
                 <tr>
-                    @foreach ($city as $name => $field)
-                        <td>{{$field}}</td>
-                    @endforeach
+                    <td>{{ $city->id }}</td>
+                    <td>{{ $city->name }}</td>
                     <td>
-                        <a href="{{route('cities.edit', ['city' => $city['id']])}}" class="">Edit</a>/
-                        <button id="destroy" onclick="city_delete('{{route('cities.destroy', ['city' => $city['id']])}}')";>Delete</button>
+                        <a href="{{route('cities.edit', $city->id)}}">Edit</a>/
+                        <a onclick="city_delete('{{route('cities.destroy', $city->id)}}')">Delete</a>
                     </td>
                 </tr>
             @endforeach

@@ -52,26 +52,33 @@
             });
         }
     </script>
-    @if ($card_types)
+    @if ($card_types->isNotEmpty())
         <table>
             <tr>
-                @foreach (array_keys($card_types[0]) as $field_name)
-                    <td>{{$field_name}}</td>
-                @endforeach
+                <td>Id</td>
+                <td>Ticket Price</td>
+                <td>User Categoty Name</td>
+                <td>Transport Name</td>
+                <td>City Name</td>
                 <td>Actions</td>
             </tr>
             @foreach ($card_types as $card_type)
                 <tr>
-                    @foreach ($card_type as $name => $field)
-                        @if (is_array($field))
-                            <td><a href="{{ $field['href'] }}">{{ $field['name'] }}</a></td>
-                        @else
-                            <td>{{$field}}</td>
-                        @endif
-                    @endforeach
+                    <td>{{$card_type->id}}</td>
+                    <td>{{$card_type->price}}</td>
+                    <td><a href="{{ route('user_categories.edit', $card_type->user_category->id) }}">
+                        {{$card_type->user_category->name}}
+                    </a></td>
+                    <td><a href="{{ route('transports.edit', $card_type->transport->id) }}">
+                        {{$card_type->transport->name}}
+                    </a></td>
+                    <td><a href="{{ route('cities.edit', $card_type->city->id) }}">
+                        {{$card_type->city->name}}
+                    </a></td>
+
                     <td>
-                        <a id="action" href="{{route('card_types.edit', ['card_type' => $card_type['id']])}}" class="">Edit</a>/
-                        <button id="destroy" onclick="card_type_delete('{{route('card_types.destroy', ['card_type' => $card_type['id']])}}')";>Delete</button>
+                        <a id="action" href="{{route('card_types.edit', $card_type->id)}}" class="">Edit</a>/
+                        <a id="destroy" onclick="card_type_delete('{{route('card_types.destroy',  $card_type->id)}}')";>Delete</a>
                     </td>
                 </tr>
             @endforeach

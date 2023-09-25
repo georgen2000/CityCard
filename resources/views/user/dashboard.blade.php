@@ -4,39 +4,6 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-
-    <style type="text/css">
-        main {
-            margin-top: 30px;
-        }
-        table {
-            width: 60%; /* Ширина таблицы */
-            border: 1px solid; /* Рамка вокруг таблицы */
-            margin: auto; /* Выравниваем таблицу по центру окна  */
-        }
-        td {
-            padding: 10px;
-            border: 1px solid;
-            text-align: center; /* Выравниваем текст по центру ячейки */
-        }
-        a, #destroy {
-            color: blue;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        a:hover, #destroy:hover {
-            color: red;
-        }
-
-        a:active {
-            color: black;
-        }
-
-        a:visited {
-            color: goldenrod;
-        }
-    </style>
     <script type="text/javascript">
         function card_delete (url) {
             $.ajax({
@@ -61,16 +28,16 @@
                     @csrf
                     <!-- Card type -->
                     <div class="mt-4">
-                        <x-input-label for="card_type" :value="__('Card type')" />
+                        <x-input-label for="card_type_id" :value="__('Card type')" />
                         <select name="card_type_id" class="mt-1 block w-full">
                             <option value="">--</option>
                             @foreach ($card_types as $card_type)
-                            <option value="{{ $card_type['id'] }}">
-                                City:{{ $card_type['city'] }}\Transport:{{ $card_type['transport'] }}
-                            </option>
+                                <option value="{{ $card_type->id }}">
+                                    City:{{ $card_type->city->name }}\Transport:{{ $card_type->transport->name }}
+                                </option>
                             @endforeach
                         </select>
-                        <x-input-error :messages="$errors->get('user_category')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('card_type_id')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center gap-4">
@@ -89,7 +56,7 @@
             </section>
         </div>
     </div>
-    @if ($cards)
+    @if ($cards->isNotEmpty())
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <section>
                 <div style="text-align: center">
@@ -99,22 +66,39 @@
                 </div>
                 <table>
                     <tr>
-                        @foreach (array_keys($cards[0]) as $field_name)
-                            <td>{{$field_name}}</td>
-                        @endforeach
+                        <td>Card Number</td>
+                        <td>Card Balance</td>
+                        <td>Ticket Price</td>
+                        <td>City Name</td>
+                        <td>Transport Name</td>
                         <td>Actions</td>
                     </tr>
+
                     @foreach ($cards as $card)
-                        <tr>
-                            @foreach ($card as $name => $field)
-                                <td>{{$field}}</td>
-                            @endforeach
-                            <td>
-                                <a href="{{route('history', ['card' => $card['id']])}}">Transactions</a> |
-                                <button id="destroy" onclick="card_delete('{{route('cards.destroy', ['card' => $card['id']])}}')";>Delete</button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{$card->number}}</td>
+                        <td>{{$card->balance}}</td>
+
+                            @if (is_null($card->card_type))
+                                <td class="red">CARD</td>
+                                <td class="red">IS</td>
+                                <td class="red">NO ACTIVE</td>
+                            @else
+                                <td>{{$card->card_type->price}}</td>
+                                <td>{{$card->card_type->city->name}}</td>
+                                <td>{{$card->card_type->transport->name}}</td>
+                            @endif
+
+                        <td>
+                            <a href="{{route('history', $card->id)}}">Transactions</a> |
+                            <button id="destroy"
+                                onclick="card_delete('{{route('cards.destroy', $card->id)}}')";>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
                     @endforeach
+
                 </table>
             </section>
         </div>

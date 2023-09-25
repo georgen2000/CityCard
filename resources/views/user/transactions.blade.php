@@ -36,9 +36,12 @@
             color: goldenrod;
         }
     </style>
-    @if ($transactions)
-        @foreach ($transactions as $transaction)
-            <div style="text-align: center"><p>Time: {{$transaction['created_at']}} &emsp; Balance: {{$transaction['money_count']}} грн</p> </div>
+    @if ($transactions->isNotEmpty())
+        @foreach ($transactions as $trans)
+            <div style="text-align: center"><p>
+                Time: {{$trans->created_at}}
+                &emsp; Balance: {{$trans->is_spending ? "-" . $trans->money_count : "+" . $trans->money_count}} грн
+            </p></div>
         @endforeach
     @endif
 

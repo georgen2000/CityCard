@@ -19,15 +19,18 @@ class CardType extends Model
         'city_id',
     ];
 
-    public function user_category(): BelongsTo {
+    public function userCategory(): BelongsTo
+    {
         return $this->belongsTo(UserCategory::class);
     }
 
-    public function transport(): BelongsTo {
+    public function transport(): BelongsTo
+    {
         return $this->belongsTo(Transport::class);
     }
 
-    public function city(): BelongsTo {
+    public function city(): BelongsTo
+    {
         return $this->belongsTo(City::class);
     }
 }

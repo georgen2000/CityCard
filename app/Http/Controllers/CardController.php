@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CardRequest;
 use App\Models\Card;
 use App\Models\CardType;
 use Illuminate\Http\Request;
@@ -15,49 +16,26 @@ class CardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $cards = $user->cards->flatMap(function ($card) {
-            return [$card->getShowFields()];
-        })->all();
-        $card_types = CardType::get()->where('user_category_id', $user->user_category_id)->flatMap(
-            function ($card_type) {
-                return [[
-                    'id' => $card_type->id,
-                    'city' => $card_type->city->name,
-                    'transport' => $card_type->transport->name,
-                ]];
-            }
-        );
-        return view('user.dashboard', ['cards' => $cards, 'card_types' => $card_types]);
+        $cardTypes = CardType::get()->where('user_category_id', $user->user_category_id)
+            ->loadMissing(['city', 'transport']);
+        return view('user.dashboard', ['cards' => $user->cards->sortByDesc('card_type_id'), 'card_types' => $cardTypes]);
     }
 
-    public function history($card_id)
+    public function history(Card $card)
     {
-        $card =  Card::find($card_id);
-        if (!$card || !$card->transactions){
-            return Redirect::route('dashboard');
-        }
-        $trans = $card->transactions;
-        return view('user.transactions', ['transactions' => $card->transactions->flatMap(function ($trans) {
-            return [[
-                'money_count' => $trans->is_spending ? "-" . $trans->money_count : "+" . $trans->money_count,
-                'created_at' => $trans->created_at,
-            ]];
-        })]);
+        return view('user.transactions', ['transactions' => $card->transactions]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CardRequest $request)
     {
-        $validatedData = $request->validate([
-            'card_type_id' => ['required', 'integer'],
-        ]);
-        $data = [
+        $data = [ # maybe should use factory?
             "user_id" => auth()->user()->id,
             "number" => fake()->numerify('##########'),
         ];
-        $card = new Card($data + $validatedData);
+        $card = new Card($data + $request->all());
         $card->save();
         return Redirect::route('dashboard')->with('status', 'card-created');
     }

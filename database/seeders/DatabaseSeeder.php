@@ -30,9 +30,8 @@ class DatabaseSeeder extends Seeder
             'card_type_id' => CardType::factory()->create([
                 'user_category_id' => $users[1]->user_category_id,
             ]),
-        ])->each(function ($card){
+        ])->each(function ($card) {
             $card->setBalance();
         });
-
     }
 }

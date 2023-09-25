@@ -4,17 +4,17 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900">
-                        {{ __("Update City: '$city[name]' with id: '$city[id]'") }}
+                        {{ __("Update City: '$city->name' with id: '$city->id'") }}
                     </h2>
                 </header>
 
-                <form method="post" action="{{ route('cities.update', $city['id']) }}" class="mt-6 space-y-6">
+                <form method="post" action="{{ route('cities.update', $city->id) }}" class="mt-6 space-y-6">
                     @csrf
                     @method('put')
 
                     <div>
                         <x-input-label for="name" :value="__('Name')" />
-                        <x-text-input id="name" name="name" value="{{$city['name']}}" type="text" class="mt-1 block w-full" />
+                        <x-text-input id="name" name="name" value="{{$city->name}}" type="text" class="mt-1 block w-full" />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
