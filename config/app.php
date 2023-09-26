@@ -83,11 +83,11 @@ return [
     |
     */
 
-    'locale' => 'ua',
+    'locale' => 'uk',
 
     'available_locales' => [
         'en' => 'English',
-        'ua' => 'Ukrainian',
+        'uk' => 'Ukrainian',
     ],
     /*
     |--------------------------------------------------------------------------
