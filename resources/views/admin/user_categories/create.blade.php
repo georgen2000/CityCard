@@ -4,7 +4,7 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900">
-                        {{ __("Create User_category") }}
+                        {{ __("Create User category") }}
                     </h2>
                 </header>
 
@@ -19,7 +19,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('user_categories.index')}}" >Cansel</a>
+                        <a href="{{route('user_categories.index')}}" >{{ __('Cansel') }}</a>
                         @if (session('status') === 'user-category-created')
                             <p
                                 x-data="{ show: true }"

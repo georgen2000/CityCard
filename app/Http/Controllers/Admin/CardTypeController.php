@@ -18,7 +18,7 @@ class CardTypeController extends Controller
      */
     public function index()
     {
-        $cardTypes = CardType::all()->load(['city', 'transport', 'user_category']);
+        $cardTypes = CardType::all()->load(['city', 'transport', 'userCategory']);
         return view('admin.card_types.index', ['card_types'=> $cardTypes]);
     }
 
@@ -39,7 +39,7 @@ class CardTypeController extends Controller
      */
     public function store(CardTypeRequest $request)
     {
-        $cardType = new CardType($request->all());
+        $cardType = new CardType($request->validated());
         $cardType->save();
         return Redirect::route('card_types.create')->with('status', 'card-type-created');
     }

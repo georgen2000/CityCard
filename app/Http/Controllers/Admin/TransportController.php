@@ -32,7 +32,7 @@ class TransportController extends Controller
      */
     public function store(TransportRequest $request)
     {
-        $transport = new Transport($request->all());
+        $transport = new Transport($request->validated());
         $transport->save();
         return Redirect::route('transports.create')->with('status', 'transport-created');
     }

@@ -58,7 +58,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('card_types.index')}}" >Cansel</a>
+                        <a href="{{route('card_types.index')}}" >{{ __('Cansel') }}</a>
                         @if (session('status') === 'card-type-created')
                             <p
                                 x-data="{ show: true }"

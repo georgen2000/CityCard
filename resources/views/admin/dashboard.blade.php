@@ -9,16 +9,16 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <a href="{{ route('cities.index') }}">City Table</a>
+                    <a href="{{ route('cities.index') }}">{{ __('City Table') }}</a>
                 </div>
                 <div class="p-6 text-gray-900">
-                    <a href="{{ route('transports.index') }}">Transport Table</a>
+                    <a href="{{ route('transports.index') }}">{{ __('Transport Table') }}</a>
                 </div>
                 <div class="p-6 text-gray-900">
-                    <a href="{{ route('user_categories.index') }}">User Category Table</a>
+                    <a href="{{ route('user_categories.index') }}">{{ __('User Category Table') }}</a>
                 </div>
                 <div class="p-6 text-gray-900">
-                    <a href="{{ route('card_types.index') }}">Card Type Table</a>
+                    <a href="{{ route('card_types.index') }}">{{ __('Card Type Table') }}</a>
                 </div>
 
             </div>

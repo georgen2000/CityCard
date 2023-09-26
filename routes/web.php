@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Card;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CardController;
-
+use App\Helpers\Common;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,23 +16,33 @@ use App\Http\Controllers\CardController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/{locale?}', function ($locale = null) {
+//     if (isset($locale) && in_array($locale, ['ua', 'en'])) {
+//         app()->setLocale($locale);
+//     }
 
-Route::middleware('auth')->group(function () {
+//     return view('welcome');
+// });
 
-    Route::middleware('auth.user')->group(function () {
-        Route::get('dashboard', [CardController::class, 'index'])->name('dashboard');
-        Route::post('dashboard', [CardController::class, 'store'])->name('cards.store');
-        Route::delete('cards/{card}', [CardController::class, 'destroy'])->name('cards.destroy');
-        Route::get('history/{card}', [CardController::class, 'history'])->name('history');
+Route::prefix(Common::getLocale())->middleware('localized')->group(function () {
+
+    Route::get('/', function () {
+        return view('welcome');
     });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    Route::middleware('auth')->group(function () {
+        Route::middleware('auth.user')->group(function () {
+            Route::get('dashboard', [CardController::class, 'index'])->name('dashboard');
+            Route::post('dashboard', [CardController::class, 'store'])->name('cards.store');
+            Route::delete('cards/{card}', [CardController::class, 'destroy'])->name('cards.destroy');
+            Route::get('history/{card}', [CardController::class, 'history'])->name('history');
+        });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+    require __DIR__ . '/auth.php';
+    require __DIR__ . '/admin.php';
+});

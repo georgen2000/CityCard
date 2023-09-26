@@ -14,7 +14,8 @@
         <!-- Scripts -->
         <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">    </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <link href="/my.css" rel="stylesheet" />
+        <link href="/myscripts.css" rel="stylesheet" />
+        <script src="/myscripts.js"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

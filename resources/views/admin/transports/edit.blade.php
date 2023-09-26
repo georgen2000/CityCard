@@ -4,7 +4,10 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900">
-                        {{ __("Update Transport: '$transport->name' with id: '$transport->id'") }}
+                        {{ __('messages.update_transport', [
+                            'name' => $transport->name,
+                            'id' => $transport->id,
+                        ]) }}
                     </h2>
                 </header>
 
@@ -20,7 +23,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('transports.index')}}" >Cansel</a>
+                        <a href="{{route('transports.index')}}" >{{ __('Cansel') }}</a>
                         @if (session('status') === 'transport-updated')
                             <p
                                 x-data="{ show: true }"

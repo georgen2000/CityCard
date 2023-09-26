@@ -19,7 +19,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('cities.index')}}" >Cansel</a>
+                        <a href="{{route('cities.index')}}" >{{ __('Cansel') }}</a>
                         @if (session('status') === 'city-created')
                             <p
                                 x-data="{ show: true }"

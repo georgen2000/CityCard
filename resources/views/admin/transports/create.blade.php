@@ -19,7 +19,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('transports.index')}}" >Cansel</a>
+                        <a href="{{route('transports.index')}}" >{{ __('Cansel') }}</a>
                         @if (session('status') === 'transport-created')
                             <p
                                 x-data="{ show: true }"

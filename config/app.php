@@ -83,8 +83,12 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ua',
 
+    'available_locales' => [
+        'en' => 'English',
+        'ua' => 'Ukrainian',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

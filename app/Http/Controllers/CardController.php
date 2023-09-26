@@ -35,7 +35,7 @@ class CardController extends Controller
             "user_id" => auth()->user()->id,
             "number" => fake()->numerify('##########'),
         ];
-        $card = new Card($data + $request->all());
+        $card = new Card($data + $request->validated());
         $card->save();
         return Redirect::route('dashboard')->with('status', 'card-created');
     }

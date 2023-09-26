@@ -48,7 +48,7 @@ class CityController extends Controller
      */
     public function update(CityRequest $request, City $city)
     {
-        $city->update($request->all());
+        $city->update($request->validated());
         return Redirect::route('cities.edit', $city)->with('status', 'city-updated');
     }
 

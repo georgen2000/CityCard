@@ -21,17 +21,17 @@
 
                     <!-- User Category -->
                     <div class="mt-4">
-                        <x-input-label for="user_category_id" :value="__('User Category')" />
-                        <select name="user_category_id" class="mt-1 block w-full">
-                            @foreach ($user_categgoties as $user_category)
-                            <option value="{{ $user_category->id }}"
-                                @if ($user_category->id == $card_type->user_category->id)
+                        <x-input-label for="usercategory_id" :value="__('User Category')" />
+                        <select name="usercategory_id" class="mt-1 block w-full">
+                            @foreach ($user_categgoties as $usercategory)
+                            <option value="{{ $usercategory->id }}"
+                                @if ($usercategory->id == $card_type->usercategory->id)
                                     selected
                                 @endif
-                            >{{ $user_category->name }}</option>
+                            >{{ $usercategory->name }}</option>
                             @endforeach
                         </select>
-                        <x-input-error :messages="$errors->get('user_category')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('usercategory')" class="mt-2" />
                     </div>
 
                     <!-- Transport -->
@@ -68,7 +68,7 @@
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('card_types.index')}}" >Cansel</a>
+                        <a href="{{route('card_types.index')}}" >{{__('Cansel')}}</a>
                         @if (session('status') === 'card-type-updated')
                             <p
                                 x-data="{ show: true }"
@@ -76,7 +76,7 @@
                                 x-transition
                                 x-init="setTimeout(() => show = false, 2000)"
                                 class="text-sm text-gray-600"
-                            >{{ __('Updated.') }}</p>
+                            >{{ __('Saved.') }}</p>
                         @endif
                     </div>
                 </form>

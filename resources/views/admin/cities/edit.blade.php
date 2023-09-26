@@ -4,7 +4,10 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900">
-                        {{ __("Update City: '$city->name' with id: '$city->id'") }}
+                        {{ __('messages.update_city', [
+                            'name' => $city->name,
+                            'id' => $city->id,
+                        ]) }}
                     </h2>
                 </header>
 
@@ -14,21 +17,17 @@
 
                     <div>
                         <x-input-label for="name" :value="__('Name')" />
-                        <x-text-input id="name" name="name" value="{{$city->name}}" type="text" class="mt-1 block w-full" />
+                        <x-text-input id="name" name="name" value="{{ $city->name }}" type="text"
+                            class="mt-1 block w-full" />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('cities.index')}}" >Cansel</a>
+                        <a href="{{ route('cities.index') }}">{{ __('Cansel') }}</a>
                         @if (session('status') === 'city-updated')
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600"
-                            >{{ __('Saved.') }}</p>
+                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                                class="text-sm text-gray-600">{{ __('Saved.') }}</p>
                         @endif
                     </div>
                 </form>

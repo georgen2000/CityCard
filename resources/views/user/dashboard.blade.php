@@ -4,24 +4,12 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-    <script type="text/javascript">
-        function card_delete (url) {
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                data:{ _token: "{{ csrf_token()}}"},
-                success: function(html){
-                    location.reload();
-                }
-            });
-        }
-    </script>
     <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
         <div class="max-w-xl" style="margin: auto">
             <section>
                 <div>
                     <h3 class="text-lg font-medium text-gray-900">
-                        {{ __("Create Card") }}
+                        {{ __('Create Card') }}
                     </h3>
                 </div>
                 <form method="post" action="{{ route('cards.store') }}" class="mt-6 space-y-6">
@@ -33,7 +21,8 @@
                             <option value="">--</option>
                             @foreach ($card_types as $card_type)
                                 <option value="{{ $card_type->id }}">
-                                    City:{{ $card_type->city->name }}\Transport:{{ $card_type->transport->name }}
+                                    {{ __('City') }}:{{ $card_type->city->name }} \
+                                    {{ __('Transport') }}:{{ $card_type->transport->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -43,13 +32,8 @@
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Create') }}</x-primary-button>
                         @if (session('status') === 'card-created')
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600"
-                            >{{ __('Created.') }}</p>
+                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                                class="text-sm text-gray-600">{{ __('Created.') }}</p>
                         @endif
                     </div>
                 </form>
@@ -61,42 +45,43 @@
             <section>
                 <div style="text-align: center">
                     <h3 class="text-lg font-medium text-gray-900">
-                        {{ __("List of Cards") }}
+                        {{ __('List of Cards') }}
                     </h3>
                 </div>
                 <table>
                     <tr>
-                        <td>Card Number</td>
-                        <td>Card Balance</td>
-                        <td>Ticket Price</td>
-                        <td>City Name</td>
-                        <td>Transport Name</td>
-                        <td>Actions</td>
+                        <td>{{ __('Card Number') }}</td>
+                        <td>{{ __('Card Balance') }}</td>
+                        <td>{{ __('Ticket Price') }}</td>
+                        <td>{{ __('City') }}</td>
+                        <td>{{ __('Transport') }}</td>
+                        <td>{{ __('Actions') }}</td>
                     </tr>
 
                     @foreach ($cards as $card)
-                    <tr>
-                        <td>{{$card->number}}</td>
-                        <td>{{$card->balance}}</td>
+                        <tr>
+                            <td>{{ $card->number }}</td>
+                            <td>{{ $card->balance }}</td>
 
                             @if (is_null($card->card_type))
-                                <td class="red">CARD</td>
-                                <td class="red">IS</td>
-                                <td class="red">NO ACTIVE</td>
+                                <td class="red">{{ __('CARD') }}</td>
+                                <td class="red">{{ __('IS') }}</td>
+                                <td class="red">{{ __('NO ACTIVE') }}</td>
                             @else
-                                <td>{{$card->card_type->price}}</td>
-                                <td>{{$card->card_type->city->name}}</td>
-                                <td>{{$card->card_type->transport->name}}</td>
+                                <td>{{ $card->card_type->price }}</td>
+                                <td>{{ $card->card_type->city->name }}</td>
+                                <td>{{ $card->card_type->transport->name }}</td>
                             @endif
+                            <td>
+                                <?php $temp = route('cards.destroy', ['card' => $card->id])?>
 
-                        <td>
-                            <a href="{{route('history', $card->id)}}">Transactions</a> |
-                            <button id="destroy"
-                                onclick="card_delete('{{route('cards.destroy', $card->id)}}')";>
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                                <a href="{{ route('history', ['card' => $card->id]) }}">{{ __('Transactions') }}</a> |
+                                <button id="destroy"
+                                    onclick="delete_db_obj('{{$temp}}')";>
+                                    {{ __('Delete') }}
+                                </button>
+                            </td>
+                        </tr>
                     @endforeach
 
                 </table>

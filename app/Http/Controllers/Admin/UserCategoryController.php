@@ -31,7 +31,7 @@ class UserCategoryController extends Controller
      */
     public function store(UserCategoryRequest $request)
     {
-        $user_category = new UserCategory($request->all());
+        $user_category = new UserCategory($request->validated());
         $user_category->save();
         return Redirect::route('user_categories.create')->with('status', 'user-category-created');
     }
