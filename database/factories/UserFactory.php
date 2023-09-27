@@ -25,7 +25,6 @@ class UserFactory extends Factory
             'password' => 'your_first_password',
             'remember_token' => Str::random(10),
             'phone_number' => fake()->phoneNumber(),
-            'user_category_id' => UserCategory::factory(),
         ];
     }
 
@@ -36,13 +35,6 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
-        ]);
-    }
-
-    public function admin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'is_admin' => true,
         ]);
     }
 }

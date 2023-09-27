@@ -21,7 +21,6 @@ class CardFactory extends Factory
         return [
             'number' => fake()->numerify('##########'),
             'balance' => 0,
-            'card_type_id' => CardType::factory(),
         ];
     }
 }

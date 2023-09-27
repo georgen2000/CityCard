@@ -19,7 +19,7 @@ class TransactionFactory extends Factory
     {
         return [
             'money_count' => fake()->randomFloat(2, 100, 500),
-            'is_spending' => false,
+            'is_spending' => fake()->boolean(),
         ];
     }
 }
