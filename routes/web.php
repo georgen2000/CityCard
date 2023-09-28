@@ -35,6 +35,7 @@ Route::prefix(Common::getLocale())->middleware('localized')->group(function () {
             Route::get('dashboard', [CardController::class, 'index'])->name('dashboard');
             Route::post('dashboard', [CardController::class, 'store'])->name('cards.store');
             Route::delete('cards/{card}', [CardController::class, 'destroy'])->name('cards.destroy');
+            Route::get('cards/create', [CardController::class, 'create'])->name('cards.create');
             Route::get('history/{card}', [CardController::class, 'history'])->name('history');
         });
 

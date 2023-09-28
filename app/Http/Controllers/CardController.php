@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Filters\CardFilter;
+use App\Http\Requests\CardCreateRequest;
 use App\Http\Requests\CardFilterRequest;
-use App\Http\Requests\CardRequest;
+use App\Http\Requests\CardStoreRequest;
 use App\Models\Card;
 use App\Models\City;
 use App\Models\CardType;
 use App\Models\Transaction;
 use App\Models\Transport;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class CardController extends Controller
@@ -22,24 +22,21 @@ class CardController extends Controller
     {
         $user = auth()->user();
 
-        $filter = new CardFilter($request->validated());
-        $cards = Card::where('user_id', $user->id)
-            ->filter($filter)
+        $filter = new CardFilter(Card::class);
+
+        $cards = $filter->apply($request->validated())->where('user_id', $user->id)
             ->orderByRaw('card_type_id is null asc')
             ->orderBy('balance', 'desc')
             ->paginate(5);
 
         $cards->load(['cardType.city', 'cardType.transport']);
 
-        $cardTypes = CardType::where('user_category_id', $user->user_category_id)->get()
-            ->loadMissing(['city', 'transport']);
 
         $transports = Transport::all();
         $cities = City::all();
 
         return view('user.dashboard', [
             'cards' => $cards,
-            'cardTypes' => $cardTypes,
             'cities' => $cities,
             'transports' => $transports,
         ]);
@@ -51,16 +48,51 @@ class CardController extends Controller
         return view('user.transactions', ['transactions' => $transactions]);
     }
 
+    public function create(CardCreateRequest $request)
+    {
+        $user = auth()->user();
+        $cityId = $request->get('city');
+
+        if (isset($cityId)) {
+            $city = City::find($cityId);
+
+            $cardTypes = CardType::select("transport_id")
+                ->where('user_category_id', $user->user_category_id)
+                ->where('city_id', $cityId);
+            $transports = Transport::whereIn('id', $cardTypes)->get();
+
+            return view('user.card_create', [
+                'city' => $city,
+                'transports' => $transports,
+            ]);
+        } else {
+            $cities = City::all();
+
+            return view('user.card_create', [
+                'cities' => $cities,
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CardRequest $request)
+    public function store(CardStoreRequest $request)
     {
-        $data = [ # maybe should use factory?
-            "user_id" => auth()->user()->id,
+        $user = auth()->user();
+        $cityId = $request->get('city');
+        $transportId = $request->get('transport');
+        $cardType = CardType::select('id')
+            ->where('user_category_id', $user->user_category_id)
+            ->where('city_id', $cityId)
+            ->where('transport_id', $transportId)
+            ->first();
+        $data = [
+            "user_id" => $user->id,
             "number" => fake()->numerify('##########'),
+            "card_type_id" => $cardType->id,
         ];
-        $card = new Card($data + $request->validated());
+        $card = new Card($data);
         $card->save();
         return Redirect::route('dashboard')->with('status', 'card-created');
     }

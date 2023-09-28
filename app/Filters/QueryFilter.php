@@ -2,8 +2,9 @@
 
 namespace App\Filters;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 abstract class QueryFilter
 {
@@ -11,16 +12,17 @@ abstract class QueryFilter
 
     protected Builder $builder;
 
-    protected string $delimiter = ',';
-
-    public function __construct($validatedData)
+    /**
+     * @var string $model like YourFilteringModel::class
+     */
+    public function __construct(string $model)
     {
-        $this->validatedData = $validatedData;
+        $this->builder = $model::query();
     }
 
-    public function apply(Builder $builder)
+    public function apply($validatedData) : Builder
     {
-        $this->builder = $builder;
+        $this->validatedData = $validatedData;
 
         foreach ($this->validatedData as $methodName => $params) {
             if (is_null($params)) continue;

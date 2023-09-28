@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
+use App\Filters\ModelFilterTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Filters\QueryFilter;
-use Illuminate\Database\Eloquent\Builder;
 
 class Card extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelFilterTrait;
 
     public $timestamps = false;
 
@@ -22,29 +21,27 @@ class Card extends Model
         'card_type_id',
     ];
 
-    public function transactions(): HasMany {
+    public function transactions(): HasMany
+    {
         return $this->hasMany(Transaction::class);
     }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function cardType(): BelongsTo {
+    public function cardType(): BelongsTo
+    {
         return $this->belongsTo(CardType::class);
     }
 
-    public function setBalance() {
+    public function setBalance()
+    {
         $balance = $this->transactions->sum(function ($transaction) {
             $res = $transaction->money_count;
             return $transaction->is_spending ? -$res : $res;
         });
         $this->update(["balance" => $balance]);
     }
-
-    public function scopeFilter(Builder $builder, QueryFilter $filter)
-    {
-        return $filter->apply($builder);
-    }
-
 }

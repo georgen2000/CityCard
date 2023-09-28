@@ -1,45 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Dashboard') }} / <a href="{{route('cards.create')}}"> {{ __('Create Card')}} </a>
         </h2>
     </x-slot>
-    <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-        <div class="max-w-xl" style="margin: auto">
-            <section>
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900">
-                        {{ __('Create Card') }}
-                    </h3>
-                </div>
-                <form method="post" action="{{ route('cards.store') }}" class="mt-6 space-y-6">
-                    @csrf
-                    <!-- Card type -->
-                    <div class="mt-4">
-                        <x-input-label for="cardType_id" :value="__('Card type')" />
-                        <select name="cardType_id" class="mt-1 block w-full">
-                            <option value="">--</option>
-                            @foreach ($cardTypes as $cardType)
-                                <option value="{{ $cardType->id }}">
-                                    {{ __('City') }}:{{ $cardType->city->name }} \
-                                    {{ __('Transport') }}:{{ $cardType->transport->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <x-input-error :messages="$errors->get('cardType_id')" class="mt-2" />
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <x-primary-button>{{ __('Create') }}</x-primary-button>
-                        @if (session('status') === 'card-created')
-                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600">{{ __('Created.') }}</p>
-                        @endif
-                    </div>
-                </form>
-            </section>
-        </div>
-    </div>
     @if ($cards->isNotEmpty())
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <div class="max-w-xl" style="margin: auto">
@@ -81,11 +45,7 @@
 
                         <div class="flex justify-between gap-4">
                             <x-primary-button>{{ __('Filtrate') }}</x-primary-button>
-                            {{-- @if (session('status') === 'card-created')
-                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600">{{ __('Created.') }}</p>
-                        @endif --}}
-                        <a href="{{route('dashboard')}}">{{ __('Cansel') }}</a>
+                            <a href="{{ route('dashboard') }}">{{ __('Cansel') }}</a>
                         </div>
                     </form>
                 </section>

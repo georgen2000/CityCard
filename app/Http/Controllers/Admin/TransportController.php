@@ -50,7 +50,7 @@ class TransportController extends Controller
      */
     public function update(TransportRequest $request, Transport $transport)
     {
-        $transport->update($request->all());
+        $transport->update($request->validated());
         return Redirect::route('transports.edit', $transport)->with('status', 'transport-updated');
     }
 

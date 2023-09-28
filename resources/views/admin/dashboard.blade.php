@@ -20,7 +20,9 @@
                 <div class="p-6 text-gray-900">
                     <a href="{{ route('card_types.index') }}">{{ __('Card Type Table') }}</a>
                 </div>
-
+                <div class="p-6 text-gray-900">
+                    <a href="{{ route('users.index') }}">{{ __('User Table') }}</a>
+                </div>
             </div>
         </div>
     </div>

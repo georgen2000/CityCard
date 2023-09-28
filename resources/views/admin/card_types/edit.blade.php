@@ -21,17 +21,17 @@
 
                     <!-- User Category -->
                     <div class="mt-4">
-                        <x-input-label for="usercategory_id" :value="__('User Category')" />
-                        <select name="usercategory_id" class="mt-1 block w-full">
-                            @foreach ($user_categgoties as $usercategory)
-                            <option value="{{ $usercategory->id }}"
-                                @if ($usercategory->id == $card_type->usercategory->id)
+                        <x-input-label for="user_category_id" :value="__('User Category')" />
+                        <select name="user_category_id" class="mt-1 block w-full">
+                            @foreach ($userCategories as $userCategory)
+                            <option value="{{ $userCategory->id }}"
+                                @if ($userCategory->id == $card_type->user_category_id)
                                     selected
                                 @endif
-                            >{{ $usercategory->name }}</option>
+                            >{{ $userCategory->name }}</option>
                             @endforeach
                         </select>
-                        <x-input-error :messages="$errors->get('usercategory')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('userCategory')" class="mt-2" />
                     </div>
 
                     <!-- Transport -->

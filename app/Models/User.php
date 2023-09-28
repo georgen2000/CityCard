@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Filters\ModelFilterTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, ModelFilterTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -50,5 +53,11 @@ class User extends Authenticatable
     public function cards(): HasMany
     {
         return $this->hasMany(Card::class);
+    }
+
+
+    public function userCategory(): BelongsTo
+    {
+        return $this->belongsTo(UserCategory::class);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CardTypeController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\UserCategoryController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::middleware('auth.admin')->prefix('admin')->group(function () {
         Route::get('dashboard', function () {
@@ -15,5 +16,6 @@ Route::middleware('auth.admin')->prefix('admin')->group(function () {
         Route::resource('transports', TransportController::class)->except(['show']);
         Route::resource('user_categories', UserCategoryController::class)->except(['show']);
         Route::resource('card_types', CardTypeController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show', 'create', 'store']);
     }
 );
