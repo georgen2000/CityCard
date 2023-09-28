@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Filters\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class Card extends Model
 {
@@ -28,7 +30,7 @@ class Card extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function card_type(): BelongsTo {
+    public function cardType(): BelongsTo {
         return $this->belongsTo(CardType::class);
     }
 
@@ -38,6 +40,11 @@ class Card extends Model
             return $transaction->is_spending ? -$res : $res;
         });
         $this->update(["balance" => $balance]);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filter)
+    {
+        return $filter->apply($builder);
     }
 
 }

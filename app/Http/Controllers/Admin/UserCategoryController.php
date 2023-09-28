@@ -15,7 +15,7 @@ class UserCategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.user_categories.index', ['user_categories'=> UserCategory::all()]);
+        return view('admin.user_categories.index', ['user_categories'=> UserCategory::paginate(5)]);
     }
 
     /**

@@ -47,14 +47,19 @@
     </style>
     @if ($transactions->isNotEmpty())
         @foreach ($transactions as $trans)
-            <div style="text-align: center">
+            <div style="width: 40%; margin:auto; padding: 15px; display:flex; justify-content:space-between">
                 <p>
                     {{ __('Time') }}: {{ $trans->created_at }}
-                    &emsp; {{ __('Balance') }}:
-                    {{ $trans->is_spending ? '-' . $trans->money_count : '+' . $trans->money_count . ' ' . __('USD') }}
+                </p>
+                <p>
+                    {{ __('Balance') }}:
+                    {{ ($trans->is_spending ? '-' . $trans->money_count : '+' . $trans->money_count) . ' ' . __('USD') }}
                 </p>
             </div>
         @endforeach
+        <div style="width: 40%; margin:auto; padding: 15px">
+            {{ $transactions->render() }}
+        </div>
     @endif
 
 </x-app-layout>

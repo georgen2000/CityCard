@@ -18,7 +18,8 @@ class CardTypeController extends Controller
      */
     public function index()
     {
-        $cardTypes = CardType::all()->load(['city', 'transport', 'userCategory']);
+        $cardTypes = CardType::paginate(5);
+        $cardTypes->load(['city', 'transport', 'userCategory']);
         return view('admin.card_types.index', ['card_types'=> $cardTypes]);
     }
 

@@ -16,7 +16,7 @@ class TransportController extends Controller
      */
     public function index()
     {
-        return view('admin.transports.index', ['transports'=> Transport::all()]);
+        return view('admin.transports.index', ['transports'=> Transport::paginate(5)]);
     }
 
     /**

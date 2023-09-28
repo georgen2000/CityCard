@@ -25,6 +25,9 @@
                 </tr>
             @endforeach
         </table>
+        <div style="width: 60%; margin:auto; padding: 15px">
+            {{ $transports->render() }}
+        </div>
     @endif
 
 </x-app-layout>
