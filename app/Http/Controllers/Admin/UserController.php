@@ -18,8 +18,9 @@ class UserController extends Controller
      */
     public function index(UserFilterRequest $request)
     {
-        $filter = new UserFilter(User::class);
-        $users = $filter->apply($request->validated())->paginate(5);
+        $filter = new UserFilter(User::query());
+        $users = $filter->apply($request->validated())
+            ->paginate(5);
         $users->load(['userCategory']);
         return view('admin.users.index', ['users' => $users]);
     }

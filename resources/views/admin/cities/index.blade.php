@@ -9,12 +9,20 @@
             <tr>
                 <td>{{ __('ID') }}</td>
                 <td>{{ __('Name') }}</td>
+                <td>{{ __('Emblem') }}</td>
                 <td>{{ __('Actions') }}</td>
             </tr>
             @foreach ($cities as $city)
                 <tr>
                     <td>{{ $city->id }}</td>
                     <td>{{ $city->name }}</td>
+                    @if (empty($city->getFirstMediaUrl()))
+                        <td>{{ __('No picture') }}</td>
+                    @else
+                        <td class='center'>
+                            <img  style="height: 100px;" src="{{ $city->getFirstMediaUrl() }}" alt="{{ __('Emblem') }}">
+                        </td>
+                    @endif
                     <td>
                         <a href="{{ route('cities.edit', $city->id) }}">{{ __('Edit') }}</a>/
                         <button id="destroy" onclick="delete_db_obj('{{ route('cities.destroy', $city->id) }}')">

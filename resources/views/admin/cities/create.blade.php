@@ -4,11 +4,11 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900">
-                        {{ __("Create City") }}
+                        {{ __('Create City') }}
                     </h2>
                 </header>
 
-                <form method="post" action="{{ route('cities.store') }}" class="mt-6 space-y-6">
+                <form method="post" action="{{ route('cities.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
                     @csrf
 
                     <div>
@@ -17,17 +17,18 @@
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
+                    <div>
+                        <x-input-label for="emblem" :value="__('Emblem')" />
+                        <input id="emblem" name="emblem" type="file">
+                        <x-input-error :messages="$errors->get('emblem')" class="mt-2" />
+                    </div>
+
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        <a href="{{route('cities.index')}}" >{{ __('Cansel') }}</a>
+                        <a href="{{ route('cities.index') }}">{{ __('Cansel') }}</a>
                         @if (session('status') === 'city-created')
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600"
-                            >{{ __('Created.') }}</p>
+                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                                class="text-sm text-gray-600">{{ __('Created.') }}</p>
                         @endif
                     </div>
                 </form>

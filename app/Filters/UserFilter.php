@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UserFilter extends QueryFilter
 {
-    public function search($value): Builder
+    public function search($value)
     {
         return $this->builder->where('name', 'like', '%'.$value.'%');
     }

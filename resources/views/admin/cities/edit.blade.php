@@ -11,7 +11,8 @@
                     </h2>
                 </header>
 
-                <form method="post" action="{{ route('cities.update', $city->id) }}" class="mt-6 space-y-6">
+                <form method="post" action="{{ route('cities.update', $city->id) }}" enctype="multipart/form-data"
+                    class="mt-6 space-y-6">
                     @csrf
                     @method('put')
 
@@ -21,6 +22,23 @@
                             class="mt-1 block w-full" />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
+
+                    @if (empty($city->getFirstMedia()))
+                        <img style="height: 200px;" src="{{ $city->getFirstMediaUrl() }}" alt="{{ __('Emblem') }}">
+                    @else
+                        <img style="height: 200px;" src="{{ $city->getFirstMediaUrl() }}" alt="{{ __('Emblem') }}">
+                        <div>
+                            <x-input-label for="delete_img" :value="__('Delete Image')" />
+                            <input type="checkbox" name="delete_img" value=1>
+                        </div>
+                        {{__('Or Change Image')}}
+                    @endif
+                    <div>
+                        <x-input-label for="emblem" :value="__('Emblem')" />
+                        <input id="emblem" name="emblem" type="file">
+                        <x-input-error :messages="$errors->get('emblem')" class="mt-2" />
+                    </div>
+
 
                     <div class="flex items-center gap-4">
                         <x-primary-button>{{ __('Save') }}</x-primary-button>

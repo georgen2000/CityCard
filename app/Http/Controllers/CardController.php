@@ -22,7 +22,7 @@ class CardController extends Controller
     {
         $user = auth()->user();
 
-        $filter = new CardFilter(Card::class);
+        $filter = new CardFilter(Card::query());
 
         $cards = $filter->apply($request->validated())->where('user_id', $user->id)
             ->orderByRaw('card_type_id is null asc')

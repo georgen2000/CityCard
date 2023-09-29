@@ -22,12 +22,12 @@ class CardSeeder extends Seeder
         foreach ($users as $user) {
             $cardTypes = CardType::select("id")->where("user_category_id", $user->user_category_id)->get();
             foreach ($cardTypes as $cardType) {
-                Card::factory()->has(
+                Card::factory()->has( # todo make transport seeder
                     Transaction::factory()->count(self::TRANSACTION_COUNT)
                 )->create([
                     'card_type_id' => $cardType->id,
                     'user_id' => $user->id,
-                ])->each(function ($card) {
+                ])->each(function ($card) { # todo separate function for this functionality
                     $card->setBalance();
                 });
             }

@@ -18,7 +18,7 @@ class CardTypeController extends Controller
      */
     public function index()
     {
-        $cardTypes = CardType::paginate(5);
+        $cardTypes = CardType::paginate(5);  # todo make all varibles CammelCase and test
         $cardTypes->load(['city', 'transport', 'userCategory']);
         return view('admin.card_types.index', ['card_types'=> $cardTypes]);
     }

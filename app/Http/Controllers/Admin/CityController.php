@@ -15,7 +15,9 @@ class CityController extends Controller
      */
     public function index()
     {
-        return view('admin.cities.index', ['cities'=> City::paginate(5)]);
+        $cities = City::paginate(5);
+        $cities->load('media');
+        return view('admin.cities.index', ['cities' => $cities]);
     }
 
     /**
@@ -29,17 +31,24 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(CityRequest $request)
     {
-        $city = new City($request->validated());  # todo
+        $validated = $request->safe(); # todo so everywhere!
+        $city = new City($validated->only('name'));
         $city->save();
+        if ($validated->only('emblem')) {
+            $city->addMediaFromRequest('emblem')->toMediaCollection();
+        }
         return Redirect::route('cities.create')->with('status', 'city-created');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(City $city) {
+    public function edit(City $city)
+    {
+
         return view('admin.cities.edit', ['city' => $city]);
     }
 
@@ -48,7 +57,13 @@ class CityController extends Controller
      */
     public function update(CityRequest $request, City $city)
     {
-        $city->update($request->validated());
+        $city->update(['name' => $request->input('name')]);
+        if ($request->hasFile('emblem')) {
+            $city->addMediaFromRequest('emblem')->toMediaCollection();
+        }
+        if ($request->input('delete_img') && $media = $city->getFirstMedia()) {
+            $media->delete();
+        }
         return Redirect::route('cities.edit', $city)->with('status', 'city-updated');
     }
 

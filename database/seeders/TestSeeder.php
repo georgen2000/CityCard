@@ -115,7 +115,7 @@ class TestSeeder extends Seeder
                 }
             }
         }
-        $cardTypes = CardType::insert($cardTypeInsertArray); #todo make [][][] to [][]
+        $cardTypes = CardType::insert($cardTypeInsertArray);
 
         // foreach ($cardTypes as $cardType){
         //     foreach ()

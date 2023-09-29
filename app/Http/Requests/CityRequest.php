@@ -23,6 +23,8 @@ class CityRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255', 'string'],
+            'emblem' => ['nullable', 'image'],
+            'delete_img' => ['nullable', 'boolean'],
         ];
     }
 }
