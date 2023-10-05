@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\City;
 use App\Models\UserCategory;
+use Database\Seeders\SetBalanceSeeder;
+use Database\Seeders\TransactionSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use \App\Models\User;
@@ -22,14 +24,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CitySeeder::class,
-            TransportSeeder::class,
-            UserCategorySeeder::class,
+            // CitySeeder::class,
+            // TransportSeeder::class,
+            // UserCategorySeeder::class,
 
-            UserSeeder::class,
-            CardTypeSeeder::class,
+            // UserSeeder::class,
+            // CardTypeSeeder::class,
 
-            CardSeeder::class,
+            // CardSeeder::class,
+            // TransactionSeeder::class,
+            SetBalanceSeeder::class
         ]);
     }
 }

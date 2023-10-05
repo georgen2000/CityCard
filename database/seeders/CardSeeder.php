@@ -19,18 +19,19 @@ class CardSeeder extends Seeder
     public function run(): void
     {
         $users = User::select("id", "user_category_id")->get();
+        $cards = [];
         foreach ($users as $user) {
             $cardTypes = CardType::select("id")->where("user_category_id", $user->user_category_id)->get();
+
             foreach ($cardTypes as $cardType) {
-                Card::factory()->has( # todo make transport seeder
-                    Transaction::factory()->count(self::TRANSACTION_COUNT)
-                )->create([
+                $cards[] = [
+                    'number' => fake()->numerify('##########'),
+                    'balance' => 0,
                     'card_type_id' => $cardType->id,
                     'user_id' => $user->id,
-                ])->each(function ($card) { # todo separate function for this functionality
-                    $card->setBalance();
-                });
+                ];
             }
         }
+        Card::insert($cards);
     }
 }

@@ -57,11 +57,12 @@ class CityController extends Controller
      */
     public function update(CityRequest $request, City $city)
     {
-        $city->update(['name' => $request->input('name')]);
+        $validated = $request->safe();
+        $city->update($validated->only('name'));
         if ($request->hasFile('emblem')) {
             $city->addMediaFromRequest('emblem')->toMediaCollection();
         }
-        if ($request->input('delete_img') && $media = $city->getFirstMedia()) {
+        if ($validated->only('delete_img') && $media = $city->getFirstMedia()) {
             $media->delete();
         }
         return Redirect::route('cities.edit', $city)->with('status', 'city-updated');
